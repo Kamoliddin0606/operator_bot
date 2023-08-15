@@ -6,12 +6,13 @@ from keyboards.default.menuReports import menuReports
 from keyboards.default.menuKeyboard import menu
 import zeep
 from datetime import datetime
-
-from loader import dp
+from filters.private_chat import IsPrivate
+from loader import dp, bot
 from states.reportFromSalesRepresentativeStates import reportSR
-
+from data.config import CHATS
 @dp.message_handler(text='📊 Send a report')
 async def startGettingReport(message: types.Message):
+    
     reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
     client = zeep.Client(wsdl=reasionsReturn)
     try:
@@ -413,8 +414,12 @@ async def answer_transfer(message:types.Message, state:FSMContext):
 <i>АКБ факт        -- {akbfact}</i>
 <i>АКБ в процентах -- {akbpercent}%</i>
 
-"""
-        await message.answer(answer, reply_markup=menu)
+""" 
+        if IsPrivate():
+            await bot.send_message(CHATS, answer)
+            await message.answer(answer, reply_markup=menu)
+        else:
+            await message.answer(answer, reply_markup=menu)
         await state.finish()
     else:
         await message.reply("❌ <i>"+deoBlade+ "</i> \n<b>Вводить нужно только цифрами!! \n\n Повторно введите:</b>")

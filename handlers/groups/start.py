@@ -8,6 +8,6 @@ from keyboards.default.menuKeyboard import menu
 from loader import dp
 
 
-@dp.message_handler(IsGroup(),CommandStart())
+@dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
     await message.answer('Menu',reply_markup=menu)
