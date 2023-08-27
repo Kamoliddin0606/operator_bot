@@ -3,7 +3,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 menuReturn = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='⏪ Return to main menu'),
+            KeyboardButton(text='⏪ Вернуться в главное меню'),
            
             
         ],

@@ -10,7 +10,7 @@ from states.contactWithAdminState import contactAdmin
 from keyboards.default.returnMenu import menuReturn
 from keyboards.default.menuKeyboard import menu
 # Echo bot
-@dp.message_handler( text ="👨🏽‍💻 Contact with admin")
+@dp.message_handler( text ="👨🏽‍💻 Связаться с администратором")
 async def getMyID(message: types.Message):
     await message.reply("""
 ‼️Принимаются только следующие заявки:

@@ -11,10 +11,10 @@ from filters.private_chat import IsPrivate
 from loader import dp, bot
 from states.reportFromSalesRepresentativeStates import reportSR
 from data.config import CHATS
-@dp.message_handler(IsGroup(),commands='report')
-@dp.message_handler(IsGroup(),text='📊 Отправить отчет')
+
+@dp.message_handler(IsPrivate(),text='📊 Отправить отчет')
 async def startGettingReport(message: types.Message):
-    
+   
     reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
     client = zeep.Client(wsdl=reasionsReturn)
     try:
@@ -54,20 +54,30 @@ async def startGettingReport(message: types.Message):
         bizregionlarnomlari = ""
 
         for dict in reportData['BusinessRegionReportRow']:
-            biznesRegionlar+="\n<i>"+dict['Name']+" --  "+str(int(dict['AKB']))+"т.т.</i>"
+            biznesRegionlar+="\n<i>"+dict['Name']+"  --  "+str(int(dict['AKB']))+"т.т.</i>"
             bizregionlarnomlari+=f'{dict["Name"], }'
 
         akbKotegory = ''
         for dict in reportData['AKBByCotegoriesRow']:
-            akbKotegory+="\n<i>"+dict['Name']+" --  "+str(int(dict['AKB']))+"т.т.</i>"
+            akbKotegory+="\n<i>"+dict['Name']+"  --  "+str(int(dict['AKB']))+"т.т.</i>"
            
 
         okb = int(reportData["CountOKB"])
         akb = int(reportData["CountAKB"])
-
+        if reportData['CountVisited']:
+            countVisited = int(reportData['CountVisited'])
+        else: 
+            countVisited=0
         cash = reportData['Cash']
         transfer = reportData['Transfer']
         sum = reportData['Sum']
+        print(type(cash))
+        if cash ==None:
+            cash = 0
+        if transfer == None:
+            transfer = 0
+        if sum==None:
+            sum = 0
 
 
         answer =f"""
@@ -79,17 +89,19 @@ async def startGettingReport(message: types.Message):
 
 <b>Общее количество ОКБ и АКБ по вышеуказанным направлениям деятельности:</b>
 
-<i>ОКБ по территории --  {okb}т.т.</i>
-<i>АКБ сработанно       --  {akb}т.т.</i>
+<i>ОКБ по территории --  {okb} т.т.</i>
+<i>Количество посещенных торговых точек  --  {countVisited} т.т.</i>
+<i>Активные клиенты сегодня  --  {akb} т.т.</i>
+
 
 <b>Разделение АКБ по регионам:</b>
 {biznesRegionlar}
 
 <b>Общая стоимость заказов:</b>
 
-<i>Наличные       --  {cash}т.т.</i>
-<i>Безналичка       --  {transfer}т.т.</i>
-<i>Общая сумма заказов       --  {sum}т.т.</i>
+<i>Наличные  --  {cash} Сум</i>
+<i>Безналичка  --  {transfer} Cум</i>
+<i>Общая сумма заказов  --  {sum} Cум</i>
 
 <b>АКБ по категориям товаров:</b>
 {
@@ -103,27 +115,32 @@ async def startGettingReport(message: types.Message):
 
 <b>План и факт:</b>
 
-<i>План                -- {totalPlan}</i>
-<i>Факт                -- {totalFact}</i>
-<i>Факт в процентах    -- {totalPercent}%</i>
-<i>Прогноз             -- {totalForecast}</i>
-<i>Прогноз в процентах -- {totalpercentForecast}%</i>
+<i>План  --  {round(totalPlan,2)} Cум</i>
+<i>Факт  --  {round(totalFact,2)} Cум</i>
+<i>Факт в процентах  --  {round(totalPercent,2)}%</i>
+<i>Прогноз  --  {round(totalForecast,2)} Cум</i>
+<i>Прогноз в процентах  --  {round(totalpercentForecast,2)}%</i>
 
 <b>ОКБ и АКБ:</b>
 
-<i>ОКБ             -- {okb}</i>
-<i>АКБ план        -- {akbplan}</i>
-<i>АКБ факт        -- {akbfact}</i>
-<i>АКБ в процентах -- {akbpercent}%</i>
+<i>ОКБ  --  {okb} т.т.</i>
+<i>АКБ план  --  {akbplan} т.т.</i>
+<i>АКБ факт  --  {akbfact} т.т.</i>
+<i>АКБ в процентах --  {round(akbpercent,2)}%</i>
 
 """
-        if message.is_topic_message:
-
-            await bot.send_message(chat_id=message.chat.id, message_thread_id=message.message_thread_id,text=answer, reply_markup=menu)
-        elif IsGroup():
-            await message.answer(answer)
+        if IsPrivate():
+           chat =await bot.get_chat(-1001910673296)
+           
+           if chat.username:
+               await message.answer(f'Ваш отчет отправлен в группу "{chat.title} @{chat.username}".\n\n {answer}')
+           else:    
+                await message.answer(f'Ваш отчет отправлен в группу "{chat.title}".\n\n {answer}')
+           
+           await bot.send_message(chat_id=-1001910673296, message_thread_id=2,text=answer, reply_markup=menu)
+        
     else:
         # await message.reply_photo(photo="https://drive.google.com/file/d/1sa7LwhCITfX9CRpyYh6ZnMm1ixRgJxah/view?usp=sharing", caption='test')
         await message.reply("‼️ Вы не можете отправить отчет: \n\n 1️⃣ Вы не торговый представитель \n\n 2️⃣ Вы не зарегистрированы в программе")
 
-    
+       
