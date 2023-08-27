@@ -9,6 +9,8 @@ from aiogram.dispatcher.filters.state import State
 from states.contactWithAdminState import contactAdmin
 from keyboards.default.returnMenu import menuReturn
 from keyboards.default.menuKeyboard import menu
+from keyboards.default.menuKeyboardAdmin import menuAdmin
+from data.config import ADMINS
 # Echo bot
 @dp.message_handler( text ="👨🏽‍💻 Связаться с администратором")
 async def getMyID(message: types.Message):
@@ -26,8 +28,11 @@ async def getMyID(message: types.Message):
 async def cencelReport(message: types.Message, state:FSMContext):
 
     messageToAdmin = f'<b>message from:</b> {message.from_user.id} @{message.from_user.username}   {message.from_user.full_name}:\n\n <b>Message:</b> {message.text}'
-    for admin in ADMINS:
-        await message.reply("Ваше сообщение было доставлено администратору", reply_markup=menu)
-        await bot.send_message(admin,messageToAdmin)
+    if str(message.from_user.id) not in ADMINS:
+            await message.reply("Ваше сообщение было доставлено администратору", reply_markup=menu)
+    else:
+            await message.reply("Ваше сообщение было доставлено администратору", reply_markup=menuAdmin)
+    
+    await bot.send_message(ADMINS[0],messageToAdmin)
     await state.finish()
 

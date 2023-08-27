@@ -4,8 +4,10 @@ from aiogram.dispatcher.filters import CommandPrivacy
 from aiogram.dispatcher.filters.state import State
 from keyboards.default.menuReports import menuReports
 from keyboards.default.menuKeyboard import menu
+from keyboards.default.menuKeyboardAdmin import menuAdmin
 import zeep
 from filters import IsPrivate, IsGroup
+from data.config import ADMINS
 from datetime import datetime
 from filters.private_chat import IsPrivate
 from loader import dp, bot
@@ -54,20 +56,30 @@ async def startGettingReport(message: types.Message):
         bizregionlarnomlari = ""
 
         for dict in reportData['BusinessRegionReportRow']:
-            biznesRegionlar+="\n<i>"+dict['Name']+" --  "+str(int(dict['AKB']))+"т.т.</i>"
+            biznesRegionlar+="\n<i>"+dict['Name']+"  --  "+str(int(dict['AKB']))+"т.т.</i>"
             bizregionlarnomlari+=f'{dict["Name"], }'
 
         akbKotegory = ''
         for dict in reportData['AKBByCotegoriesRow']:
-            akbKotegory+="\n<i>"+dict['Name']+" --  "+str(int(dict['AKB']))+"т.т.</i>"
+            akbKotegory+="\n<i>"+dict['Name']+"  --  "+str(int(dict['AKB']))+"т.т.</i>"
            
 
         okb = int(reportData["CountOKB"])
         akb = int(reportData["CountAKB"])
-
+        if reportData['CountVisited']:
+            countVisited = int(reportData['CountVisited'])
+        else: 
+            countVisited=0
         cash = reportData['Cash']
         transfer = reportData['Transfer']
         sum = reportData['Sum']
+        
+        if cash ==None:
+            cash = 0
+        if transfer == None:
+            transfer = 0
+        if sum==None:
+            sum = 0
 
 
         answer =f"""
@@ -77,19 +89,21 @@ async def startGettingReport(message: types.Message):
 
 <b>Территория</b> : {bizregionlarnomlari}<i></i> 
 
-<b>Общее количество ОКБ и АКБ по вышеуказанным направлениям деятельности:</b>
+<b>ОКБ и АКБ:</b>
 
-<i>ОКБ по территории --  {okb}т.т.</i>
-<i>АКБ сработанно       --  {akb}т.т.</i>
+<i>ОКБ по территории --  {okb} т.т.</i>
+<i>Количество посещенных торговых точек  --  {countVisited} т.т.</i>
+<i>Активные клиенты сегодня  --  {akb} т.т.</i>
+
 
 <b>Разделение АКБ по регионам:</b>
 {biznesRegionlar}
 
 <b>Общая стоимость заказов:</b>
 
-<i>Наличные       --  {cash}т.т.</i>
-<i>Безналичка       --  {transfer}т.т.</i>
-<i>Общая сумма заказов       --  {sum}т.т.</i>
+<i>Наличные  --  {cash} Сум</i>
+<i>Безналичка  --  {transfer} Cум</i>
+<i>Общая сумма заказов  --  {sum} Cум</i>
 
 <b>АКБ по категориям товаров:</b>
 {
@@ -103,23 +117,25 @@ async def startGettingReport(message: types.Message):
 
 <b>План и факт:</b>
 
-<i>План                -- {totalPlan}</i>
-<i>Факт                -- {totalFact}</i>
-<i>Факт в процентах    -- {totalPercent}%</i>
-<i>Прогноз             -- {totalForecast}</i>
-<i>Прогноз в процентах -- {totalpercentForecast}%</i>
+<i>План  --  {round(totalPlan,2)} Cум</i>
+<i>Факт  --  {round(totalFact,2)} Cум</i>
+<i>Факт в процентах  --  {round(totalPercent,2)}%</i>
+<i>Прогноз  --  {round(totalForecast,2)} Cум</i>
+<i>Прогноз в процентах  --  {round(totalpercentForecast,2)}%</i>
 
 <b>ОКБ и АКБ:</b>
 
-<i>ОКБ             -- {okb}</i>
-<i>АКБ план        -- {akbplan}</i>
-<i>АКБ факт        -- {akbfact}</i>
-<i>АКБ в процентах -- {akbpercent}%</i>
+<i>ОКБ  --  {okb} т.т.</i>
+<i>АКБ план  --  {akbplan} т.т.</i>
+<i>АКБ факт  --  {akbfact} т.т.</i>
+<i>АКБ в процентах --  {round(akbpercent,2)}%</i>
 
 """
         if message.is_topic_message:
-
-            await bot.send_message(chat_id=message.chat.id, message_thread_id=message.message_thread_id,text=answer, reply_markup=menu)
+            if str(message.from_user.id) not in ADMINS:
+                await bot.send_message(chat_id=message.chat.id, message_thread_id=message.message_thread_id,text=answer, reply_markup=menu)
+            else:
+                await bot.send_message(chat_id=message.chat.id, message_thread_id=message.message_thread_id,text=answer, reply_markup=menuAdmin)
         elif IsGroup():
             await message.answer(answer)
     else:

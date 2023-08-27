@@ -71,7 +71,7 @@ async def startGettingReport(message: types.Message):
         cash = reportData['Cash']
         transfer = reportData['Transfer']
         sum = reportData['Sum']
-        print(type(cash))
+        
         if cash ==None:
             cash = 0
         if transfer == None:
@@ -87,7 +87,7 @@ async def startGettingReport(message: types.Message):
 
 <b>Территория</b> : {bizregionlarnomlari}<i></i> 
 
-<b>Общее количество ОКБ и АКБ по вышеуказанным направлениям деятельности:</b>
+<b>ОКБ и АКБ:</b>
 
 <i>ОКБ по территории --  {okb} т.т.</i>
 <i>Количество посещенных торговых точек  --  {countVisited} т.т.</i>
