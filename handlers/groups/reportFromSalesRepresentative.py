@@ -101,9 +101,9 @@ async def startGettingReport(message: types.Message):
 
 <b>Общая стоимость заказов:</b>
 
-<i>Наличные  --  {cash} Сум</i>
-<i>Безналичка  --  {transfer} Cум</i>
-<i>Общая сумма заказов  --  {sum} Cум</i>
+<i>Наличные  --  {divide_and_split(cash)} Сум</i>
+<i>Безналичка  --  {divide_and_split(transfer)} Cум</i>
+<i>Общая сумма заказов  --  {divide_and_split(sum)} Cум</i>
 
 <b>АКБ по категориям товаров:</b>
 {
@@ -117,10 +117,10 @@ async def startGettingReport(message: types.Message):
 
 <b>План и факт:</b>
 
-<i>План  --  {round(totalPlan,2)} Cум</i>
-<i>Факт  --  {round(totalFact,2)} Cум</i>
+<i>План  --  {divide_and_split(round(totalPlan,2))} Cум</i>
+<i>Факт  --  {divide_and_split(round(totalFact,2))} Cум</i>
 <i>Факт в процентах  --  {round(totalPercent,2)}%</i>
-<i>Прогноз  --  {round(totalForecast,2)} Cум</i>
+<i>Прогноз  --  {divide_and_split(round(totalForecast,2))} Cум</i>
 <i>Прогноз в процентах  --  {round(totalpercentForecast,2)}%</i>
 
 <b>ОКБ и АКБ:</b>
@@ -142,4 +142,10 @@ async def startGettingReport(message: types.Message):
         # await message.reply_photo(photo="https://drive.google.com/file/d/1sa7LwhCITfX9CRpyYh6ZnMm1ixRgJxah/view?usp=sharing", caption='test')
         await message.reply("‼️ Вы не можете отправить отчет: \n\n 1️⃣ Вы не торговый представитель \n\n 2️⃣ Вы не зарегистрированы в программе")
 
-    
+def divide_and_split(number):
+
+  number_str = str(number)
+  numbers = []
+  for i in range(len(number_str)-1,0 , 3):
+    numbers.append(number_str[i:i + 3])
+ 
