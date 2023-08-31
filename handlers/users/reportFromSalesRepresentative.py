@@ -42,7 +42,7 @@ async def startGettingReport(message: types.Message):
         totalForecast = kpi["TotalForecast"]
         totalpercentForecast = kpi["TotalPercentForecastFact"]
 
-        okb = kpi["OKB"]
+        okbFull = kpi["OKB"]
         akbplan = kpi["AKBPlan"]
         akbfact = kpi["AKBFact"]
         akbpercent = kpi["AKBPercent"]
@@ -123,9 +123,9 @@ async def startGettingReport(message: types.Message):
 
 <b>ОКБ и АКБ:</b>
 
-<i>ОКБ  --  {okb} т.т.</i>
+<i>ОКБ  --  {okbFull} т.т.</i>
 <i>АКБ план  --  {akbplan} т.т.</i>
-<i>АКБ факт  --  {akbfact} т.т.</i>
+<i>АКБ факт  --  { } т.т.</i>
 <i>АКБ в процентах --  {round(akbpercent,2)}%</i>
 
 """
