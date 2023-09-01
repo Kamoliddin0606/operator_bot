@@ -10,7 +10,8 @@ menuAdmin = ReplyKeyboardMarkup(
             
         ],
         [
-            KeyboardButton(text='🆔 группы и темы'),
+            KeyboardButton(text='🆔 Группы и темы'),
+            KeyboardButton(text='🆔 Участники группы'),
 
         ],
          [
