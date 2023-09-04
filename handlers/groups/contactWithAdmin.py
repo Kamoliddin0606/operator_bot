@@ -40,19 +40,19 @@ async def cencelReport(message: types.Message, state:FSMContext):
 @dp.message_handler(state = contactAdmin.messageToAdmin, content_types=types.ContentTypes.PHOTO)
 async def cencelReport(message: types.Message, state:FSMContext):
 
-    messageToAdmin = f'<b>message from:</b> {message.from_user.id} @{message.from_user.username}   {message.from_user.full_name}:\n\n <b>Message:</b> {message.text}'
-    if str(message.from_user.id) not in ADMINS:
-            await message.reply("Ваше сообщение было доставлено администратору", reply_markup=menu)
-    else:
-            await message.reply("Ваше сообщение было доставлено администратору", reply_markup=menuAdmin)
+#     messageToAdmin = f'<b>message from:</b> {message.from_user.id} @{message.from_user.username}   {message.from_user.full_name}:\n\n <b>Message:</b> {message.text}'
+#     if str(message.from_user.id) not in ADMINS:
+#             await message.reply("Ваше сообщение было доставлено администратору", reply_markup=menu)
+#     else:
+#             await message.reply("Ваше сообщение было доставлено администратору", reply_markup=menuAdmin)
     
-    photos = message.photo
+#     photos = message.photo
 
     
-    photo = photos[0]
+#     photo = photos[0]
 
    
-    file_id = photo.file_id
-    await bot.send_photo(ADMINS[0], file_id,messageToAdmin)
-
+#     file_id = photo.file_id
+#     await bot.send_photo(ADMINS[0], file_id,messageToAdmin)
+    await message.reply("Бот не предназначен для получения фотоотчётов! Пожалуйста, пришлите фотоотчет в вашу группу.", reply_markup=menuAdmin)  
     await state.finish()

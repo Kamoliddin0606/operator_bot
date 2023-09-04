@@ -82,6 +82,8 @@ async def startGettingReport(message: types.Message):
 
         answer =f"""
 #dailyReport
+#privateReport
+#
 📅 Дата: {str(datetime.now().day)+'-'+str(datetime.now().month)+"-"+str(datetime.now().year)+"  "+str(datetime.now().hour)+':'+ str(datetime.now().minute)+':'+str(int(datetime.now().second))}
 🙎🏻‍♂️ ФИО: {name}
 
@@ -125,7 +127,7 @@ async def startGettingReport(message: types.Message):
 
 <i>ОКБ  --  {okbFull} т.т.</i>
 <i>АКБ план  --  {akbplan} т.т.</i>
-<i>АКБ факт  --  { } т.т.</i>
+<i>АКБ факт  --  {akbfact } т.т.</i>
 <i>АКБ в процентах --  {round(akbpercent,2)}%</i>
 
 """
@@ -136,6 +138,7 @@ async def startGettingReport(message: types.Message):
                await message.answer(f'Ваш отчет отправлен в группу "{chat.title} @{chat.username}".\n\n {answer}')
            else:    
                 await message.answer(f'Ваш отчет отправлен в группу "{chat.title}".\n\n {answer}')
+                await message.answer("Бот не будет принимать ваши отчеты. Отправьте отчет в своей группе с помощью бота")
            
            await bot.send_message(chat_id=-1001910673296, message_thread_id=2,text=answer, reply_markup=menu)
         
