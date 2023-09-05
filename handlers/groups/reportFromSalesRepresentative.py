@@ -148,4 +148,4 @@ def divide_and_split(number):
   numbers = []
   for i in range(len(number_str)-1,0 , 3):
     numbers.append(number_str[i:i + 3])
- 
+  return " ".join(numbers)
