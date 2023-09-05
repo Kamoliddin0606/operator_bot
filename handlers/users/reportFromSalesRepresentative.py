@@ -127,11 +127,7 @@ async def startGettingReport(message: types.Message):
 
 <i>ОКБ  --  {okbFull} т.т.</i>
 <i>АКБ план  --  {akbplan} т.т.</i>
-<<<<<<< HEAD
 <i>АКБ факт  --  {akbfact } т.т.</i>
-=======
-<i>АКБ факт  --  { akbfact} т.т.</i>
->>>>>>> f082c1543b98179d177c43e83776ad9e7c4dd657
 <i>АКБ в процентах --  {round(akbpercent,2)}%</i>
 
 """
