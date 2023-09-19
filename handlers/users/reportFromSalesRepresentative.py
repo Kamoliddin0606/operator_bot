@@ -159,7 +159,18 @@ def divide_and_split(number):
   """
 
   number_str = str(number)
+  number_strlist = number_str.split(".")
+  number_str1 = number_strlist[0][::-1]
+  number_str2 = number_strlist[1]
+
   numbers = []
-  for i in range(0, len(number_str), 3):
-    numbers.append(number_str[i:i + 3])
-  return " ".join(numbers)
+  for i in range(0, len(number_str1), 3):
+    numbers.append(number_str1[i:i + 3])
+  numbersRevorse = []
+  
+  for i in range(len(numbers)-1,-1,-1):
+    numbersRevorse.append(numbers[i][::-1])
+  
+  final =  " ".join(numbersRevorse)
+  final+="."+number_str2
+  return final

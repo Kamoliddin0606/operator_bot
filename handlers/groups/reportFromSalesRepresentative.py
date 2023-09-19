@@ -60,9 +60,12 @@ async def startGettingReport(message: types.Message):
             bizregionlarnomlari+=f'{dict["Name"], }'
 
         akbKotegory = ''
-        for dict in reportData['AKBByCotegoriesRow']:
-            akbKotegory+="\n<i>"+dict['Name']+"  --  "+str(int(dict['AKB']))+"т.т.</i>"
-           
+        try:
+
+            for dict in reportData['AKBByCotegoriesRow']:
+                akbKotegory+="\n<i>"+dict['Name']+"  --  "+str(int(dict['AKB']))+"т.т.</i>"
+        except: 
+            pass  
 
         okb = int(reportData["CountOKB"])
         akb = int(reportData["CountAKB"])
@@ -70,9 +73,20 @@ async def startGettingReport(message: types.Message):
             countVisited = int(reportData['CountVisited'])
         else: 
             countVisited=0
-        cash = reportData['Cash']
-        transfer = reportData['Transfer']
-        sum = reportData['Sum']
+        try:
+            cash = reportData['Cash']
+        except:
+            cash=0
+
+        try:
+
+            transfer = reportData['Transfer']
+        except:
+            transfer = 0
+        try:
+            sum = reportData['Sum']
+        except:
+            sum = 0
         
         if cash ==None:
             cash = 0
@@ -154,7 +168,18 @@ def divide_and_split(number):
   """
 
   number_str = str(number)
+  number_strlist = number_str.split(".")
+  number_str1 = number_strlist[0][::-1]
+  number_str2 = number_strlist[1]
+
   numbers = []
-  for i in range(0, len(number_str), 3):
-    numbers.append(number_str[i:i + 3])
-  return " ".join(numbers)
+  for i in range(0, len(number_str1), 3):
+    numbers.append(number_str1[i:i + 3])
+  numbersRevorse = []
+  
+  for i in range(len(numbers)-1,-1,-1):
+    numbersRevorse.append(numbers[i][::-1])
+  
+  final =  " ".join(numbersRevorse)
+  final+="."+number_str2
+  return final
