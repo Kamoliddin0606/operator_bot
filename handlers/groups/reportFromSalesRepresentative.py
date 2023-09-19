@@ -143,9 +143,18 @@ async def startGettingReport(message: types.Message):
         await message.reply("‼️ Вы не можете отправить отчет: \n\n 1️⃣ Вы не торговый представитель \n\n 2️⃣ Вы не зарегистрированы в программе")
 
 def divide_and_split(number):
+  """
+  Разделяет многозначное число на 3 с пробелами.
+
+  Args:
+    number: Число.
+
+  Returns:
+    Строка с разделенным числом.
+  """
 
   number_str = str(number)
   numbers = []
-  for i in range(len(number_str)-1,0 , 3):
+  for i in range(0, len(number_str), 3):
     numbers.append(number_str[i:i + 3])
   return " ".join(numbers)
