@@ -14,3 +14,6 @@ async def bot_start(message: types.Message):
         await message.answer(f"Привет, {message.from_user.full_name}!",reply_markup=menu)
     else:
         await message.answer(f"Привет, {message.from_user.full_name}!",reply_markup=menuAdmin) 
+        #ADMINS="659469815,"
+#BOT_TOKEN="6087699549:AAEbJTyoMYdM6WaKpQboHM-y5AnF_HGiHtQ"
+#CHATS = ""
