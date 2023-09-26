@@ -161,7 +161,10 @@ def divide_and_split(number):
   number_str = str(number)
   number_strlist = number_str.split(".")
   number_str1 = number_strlist[0][::-1]
-  number_str2 = number_strlist[1]
+  if "." in number_str:     
+    number_str2 = number_strlist[1]
+  else:
+    number_str2 = "00"
 
   numbers = []
   for i in range(0, len(number_str1), 3):
