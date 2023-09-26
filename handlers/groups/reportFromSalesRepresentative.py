@@ -145,13 +145,12 @@ async def startGettingReport(message: types.Message):
 <i>АКБ в процентах --  {round(akbpercent,2)}%</i>
 
 """
-        if message.is_topic_message:
+        if IsGroup():   
             if str(message.from_user.id) not in ADMINS:
-                await bot.send_message(chat_id=message.chat.id, message_thread_id=message.message_thread_id,text=answer, reply_markup=menu)
+                await message.reply(text=answer, reply_markup=menu)
             else:
-                await bot.send_message(chat_id=message.chat.id, message_thread_id=message.message_thread_id,text=answer, reply_markup=menuAdmin)
-        elif IsGroup():
-            await message.answer(answer)
+                await message.reply(text=answer, reply_markup=menuAdmin)
+
     else:
         # await message.reply_photo(photo="https://drive.google.com/file/d/1sa7LwhCITfX9CRpyYh6ZnMm1ixRgJxah/view?usp=sharing", caption='test')
         await message.reply("‼️ Вы не можете отправить отчет: \n\n 1️⃣ Вы не торговый представитель \n\n 2️⃣ Вы не зарегистрированы в программе")

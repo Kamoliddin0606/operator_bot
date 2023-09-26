@@ -140,7 +140,7 @@ async def startGettingReport(message: types.Message):
                 await message.answer(f'Ваш отчет отправлен в группу "{chat.title}".\n\n {answer}')
                 await message.answer("Бот не будет принимать ваши отчеты. Отправьте отчет в своей группе с помощью бота")
            
-           await bot.send_message(chat_id=-1001910673296, message_thread_id=2,text=answer, reply_markup=menu)
+          # await bot.send_message(chat_id=-1001910673296, message_thread_id=2,text=answer, reply_markup=menu)
         
     else:
         # await message.reply_photo(photo="https://drive.google.com/file/d/1sa7LwhCITfX9CRpyYh6ZnMm1ixRgJxah/view?usp=sharing", caption='test')
