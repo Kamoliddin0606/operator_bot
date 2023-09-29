@@ -28,25 +28,26 @@ async def startGettingReport(message: types.Message):
     settings = Settings(strict=False, xml_huge_tree=True)
     history = HistoryPlugin()
     transport = Transport(timeout=10)
-    reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
+    reasionsReturn = 'http://192.168.1.241:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
     # client = zeep.Client(wsdl=reasionsReturn)
     client = Client(wsdl=reasionsReturn, transport=transport, plugins=[history], settings=settings)
     try:
         user = client.service.GetUserByTelegramID(message.from_user.id)
+        print(user)
     except:
         user = None
     
-    if user:
+    if user["Code"]:
         
 
-
-        reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
+        
+        reasionsReturn = '192.168.1.241:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
         # client = zeep.Client(wsdl=reasionsReturn)
         client = Client(wsdl=reasionsReturn, transport=transport, plugins=[history], settings=settings)
         
             
         telegramuser = client.service.GetUserByTelegramID(message.from_user.id)
-        
+        print(telegramuser)
         name  = telegramuser["Name"]
         
         userCode = telegramuser['Code']
