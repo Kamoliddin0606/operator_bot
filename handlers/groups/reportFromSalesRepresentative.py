@@ -12,13 +12,25 @@ from datetime import datetime
 from filters.private_chat import IsPrivate
 from loader import dp, bot
 from states.reportFromSalesRepresentativeStates import reportSR
-from data.config import CHATS
+
+
+# for check unexpect
+import zeep
+from zeep import settings
+from zeep.plugins import HistoryPlugin
+from zeep import Client, Settings
+from zeep.transports import Transport
+from lxml import etree
+
 @dp.message_handler(IsGroup(),commands='report')
 @dp.message_handler(IsGroup(),text='📊 Отправить отчет')
 async def startGettingReport(message: types.Message):
-    
+    settings = Settings(strict=False, xml_huge_tree=True)
+    history = HistoryPlugin()
+    transport = Transport(timeout=10)
     reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
-    client = zeep.Client(wsdl=reasionsReturn)
+    # client = zeep.Client(wsdl=reasionsReturn)
+    client = Client(wsdl=reasionsReturn, transport=transport, plugins=[history], settings=settings)
     try:
         user = client.service.GetUserByTelegramID(message.from_user.id)
     except:
@@ -26,9 +38,11 @@ async def startGettingReport(message: types.Message):
     
     if user:
         
-   
+
+
         reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
-        client = zeep.Client(wsdl=reasionsReturn)
+        # client = zeep.Client(wsdl=reasionsReturn)
+        client = Client(wsdl=reasionsReturn, transport=transport, plugins=[history], settings=settings)
         
             
         telegramuser = client.service.GetUserByTelegramID(message.from_user.id)

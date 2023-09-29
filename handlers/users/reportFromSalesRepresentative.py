@@ -10,13 +10,25 @@ from datetime import datetime
 from filters.private_chat import IsPrivate
 from loader import dp, bot
 from states.reportFromSalesRepresentativeStates import reportSR
-from data.config import CHATS
+
+
+
+# for check unexpect
+import zeep
+from zeep import settings
+from zeep.plugins import HistoryPlugin
+from zeep import Client, Settings
+from zeep.transports import Transport
+from lxml import etree
 
 @dp.message_handler(IsPrivate(),text='📊 Отправить отчет')
 async def startGettingReport(message: types.Message):
-   
+    settings = Settings(strict=False, xml_huge_tree=True)
+    history = HistoryPlugin()
+    transport = Transport(timeout=10)
     reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
-    client = zeep.Client(wsdl=reasionsReturn)
+    # client = zeep.Client(wsdl=reasionsReturn)
+    client = Client(wsdl=reasionsReturn, transport=transport, plugins=[history], settings=settings)
     try:
         user = client.service.GetUserByTelegramID(message.from_user.id)
     except:
@@ -26,8 +38,8 @@ async def startGettingReport(message: types.Message):
         
    
         reasionsReturn = 'http://kit.gloriya.uz:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
-        client = zeep.Client(wsdl=reasionsReturn)
-        
+        # client = zeep.Client(wsdl=reasionsReturn)
+        client = Client(wsdl=reasionsReturn, transport=transport, plugins=[history], settings=settings)
             
         telegramuser = client.service.GetUserByTelegramID(message.from_user.id)
         
@@ -132,13 +144,9 @@ async def startGettingReport(message: types.Message):
 
 """
         if IsPrivate():
-           chat =await bot.get_chat(-1001910673296)
            
-           if chat.username:
-               await message.answer(f'Ваш отчет отправлен в группу "{chat.title} @{chat.username}".\n\n {answer}')
-           else:    
-                await message.answer(f'Ваш отчет отправлен в группу "{chat.title}".\n\n {answer}')
-                await message.answer("Бот не будет принимать ваши отчеты. Отправьте отчет в своей группе с помощью бота")
+           
+          await message.answer("Бот не будет принимать ваши отчеты. Отправьте отчет в своей группе с помощью бота")
            
           # await bot.send_message(chat_id=-1001910673296, message_thread_id=2,text=answer, reply_markup=menu)
         
