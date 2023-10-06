@@ -38,7 +38,7 @@ async def startGettingReport(message: types.Message):
     if user["Code"]:
         
    
-        reasionsReturn = '192.168.1.241:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
+        reasionsReturn = 'http://192.168.1.241:5443/EVYAP_UT/EVYAP_UT.1cws?wsdl'
         # client = zeep.Client(wsdl=reasionsReturn)
         client = Client(wsdl=reasionsReturn, transport=transport, plugins=[history], settings=settings)
             
@@ -63,6 +63,7 @@ async def startGettingReport(message: types.Message):
         #AKB
 
         reportData = client.service.GetDailyReport(userCode)
+        print(reportData)
         biznesRegionlar = ""
         bizregionlarnomlari = ""
 
